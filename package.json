@@ -3,5 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "author": "Rod <dev_rodts@outlook.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "git-commit-msg-linter": "^5.0.8"
+  }
 }
