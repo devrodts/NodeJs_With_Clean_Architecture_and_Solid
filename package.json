@@ -5,6 +5,7 @@
   "author": "Rod <dev_rodts@outlook.com>",
   "license": "MIT",
   "dependencies": {
+    "eslint-config-love": "44.0.0",
     "git-commit-msg-linter": "^5.0.8"
   },
   "devDependencies": {
