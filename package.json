@@ -1,0 +1,7 @@
+{
+  "name": "node_tdd",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Rod <dev_rodts@outlook.com>",
+  "license": "MIT"
+}
