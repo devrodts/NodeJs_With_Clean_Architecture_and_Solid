@@ -1,4 +1,6 @@
 import { SignUpController } from "./signup"
+import { MissingParamsError } from "../errors"
+
 
 describe("Should sign up the user correctly", () => {
 
@@ -15,7 +17,7 @@ describe("Should sign up the user correctly", () => {
 
         const httpResponse = sut.handle(httpRequest)
         expect(httpResponse.statusCode).toBe(400)
-        expect(httpResponse.body).toEqual(new Error(`Missing param: name`))
+        expect(httpResponse.body).toEqual(new MissingParamsError("name"))
     })
 
     test("Should returns 400 if no email is provided", () => {
@@ -29,6 +31,6 @@ describe("Should sign up the user correctly", () => {
         }
         const httpResponse = sut.handle(httpRequest)
         expect(httpResponse.statusCode).toBe(400)
-        expect(httpResponse.body).toEqual(new Error(`Missing param: email`))
+        expect(httpResponse.body).toEqual(new MissingParamsError(`email`))
     })
 })
