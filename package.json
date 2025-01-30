@@ -5,8 +5,8 @@
   "author": "Rod <dev_rodts@outlook.com>",
   "license": "MIT",
   "scripts": {
-    "test": "jest",
-    "test:staged": "jest"
+    "test": "jest --passWithNoTests --watch",
+    "test:staged": "jest --passWithNoTests"
   },
   "dependencies": {
     "eslint-config-love": "44.0.0",
