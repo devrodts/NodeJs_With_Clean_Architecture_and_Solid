@@ -1,3 +1,5 @@
+const { rules } = require('eslint-config-love')
+
 module.exports = (async function config() {
     const { default: love } = await import('eslint-config-love')
     return [
@@ -8,7 +10,7 @@ module.exports = (async function config() {
           ecmaVersion: 2019,
           sourceType: "commomJS",
           project: "./tsconfig.json"
-        }
+        },
       },
     ]
   })()
