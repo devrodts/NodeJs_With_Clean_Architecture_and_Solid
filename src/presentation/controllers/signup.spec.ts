@@ -33,4 +33,32 @@ describe("Should sign up the user correctly", () => {
         expect(httpResponse.statusCode).toBe(400)
         expect(httpResponse.body).toEqual(new MissingParamsError(`email`))
     })
+
+    test("Should returns 400 if no password is provided", () => {
+        const sut = new SignUpController()
+        const httpRequest = {
+            body:{
+                name: 'any_name',
+                email: "example@gmail.com",
+                passwordConfirmation: 'string'
+            }
+        }
+        const httpResponse = sut.handle(httpRequest)
+        expect(httpResponse.statusCode).toBe(400)
+        expect(httpResponse.body).toEqual(new MissingParamsError(`password`))
+    })
+
+    test("Should returns 400 if no passwordConfirm is provided", () => {
+        const sut = new SignUpController()
+        const httpRequest = {
+            body:{
+                name: 'any_name',
+                email: "example@gmail.com",
+                password: 'string'
+            }
+        }
+        const httpResponse = sut.handle(httpRequest)
+        expect(httpResponse.statusCode).toBe(400)
+        expect(httpResponse.body).toEqual(new MissingParamsError(`confirmPassword`))
+    })
 })
