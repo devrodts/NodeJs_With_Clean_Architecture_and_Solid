@@ -1,21 +1,38 @@
 import { SignUpController } from "./signup"
 import { MissingParamsError } from "../errors"
+import { InvalidParamsError } from "../errors/invalid-params"
+import { EmailValidator } from "../protocols/email-validator"
 
 
-const makeSut = (): SignUpController => {
-    return new SignUpController()
+interface SutTypes{
+    sut: SignUpController
+    emailValidatorStub: EmailValidator
+}
+const makeSut = (): SutTypes => {
+
+    class EmailValidatorStub implements EmailValidator{
+        isValidEmail(email:String): boolean{
+            return true
+        }
+    }
+
+    const emailValidatorStub = new EmailValidatorStub()
+    const sut = new SignUpController(emailValidatorStub)
+    return{
+        sut,
+        emailValidatorStub
+    }
 }
 
 describe("Should sign up the user correctly", () => {
 
-
     test("Should returns 400 if no name is provided", () => {
-        const sut = makeSut()
+        const {sut} = makeSut()
         const httpRequest = {
             body:{
                 email: 'any_name',
                 password: 'string',
-                passwordConfirmation: 'string'
+                confirmPassword: 'string'
             }
         }
 
@@ -25,12 +42,12 @@ describe("Should sign up the user correctly", () => {
     })
 
     test("Should returns 400 if no email is provided", () => {
-        const sut = makeSut()
+        const {sut} = makeSut()
         const httpRequest = {
             body:{
                 name: 'example@gmail.com',
                 password: 'string',
-                passwordConfirmation: 'string'
+                confirmPassword: 'string'
             }
         }
         const httpResponse = sut.handle(httpRequest)
@@ -39,12 +56,12 @@ describe("Should sign up the user correctly", () => {
     })
 
     test("Should returns 400 if no password is provided", () => {
-        const sut = makeSut()
+        const {sut} = makeSut()
         const httpRequest = {
             body:{
                 name: 'any_name',
                 email: "example@gmail.com",
-                passwordConfirmation: 'string'
+                confirmPassword: 'string'
             }
         }
         const httpResponse = sut.handle(httpRequest)
@@ -53,16 +70,38 @@ describe("Should sign up the user correctly", () => {
     })
 
     test("Should returns 400 if no passwordConfirm is provided", () => {
-        const sut = makeSut()
+        const {sut} = makeSut()
         const httpRequest = {
             body:{
                 name: 'any_name',
                 email: "example@gmail.com",
-                password: 'string'
+                password: 'string',
             }
         }
         const httpResponse = sut.handle(httpRequest)
         expect(httpResponse.statusCode).toBe(400)
         expect(httpResponse.body).toEqual(new MissingParamsError(`confirmPassword`))
     })
+
+    test("Should returns 400 if an invalid email is provided", () => {
+        const { sut, emailValidatorStub } = makeSut();
+        jest.spyOn(emailValidatorStub, "isValidEmail").mockReturnValueOnce(false);
+        
+        const httpRequest = {
+            body: {
+                name: "any_name",
+                email: "invalid_email@gmail.com",
+                password: "string",
+                confirmPassword: "string"
+            }
+        };
+    
+        const httpResponse = sut.handle(httpRequest);
+        
+        console.log(httpResponse); 
+    
+        expect(httpResponse.statusCode).toBe(400);
+        expect(httpResponse.body).toEqual(new InvalidParamsError("email"));
+    });
+    
 })
