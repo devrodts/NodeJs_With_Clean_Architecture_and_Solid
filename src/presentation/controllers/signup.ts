@@ -4,6 +4,8 @@ import {badRequest} from "../helpers"
 import { Controller } from "../protocols/controller"
 import { EmailValidator } from "../protocols/email-validator"
 import { InvalidParamsError } from "../errors/invalid-params"
+
+
 export class SignUpController implements Controller{
 
     private readonly emailValidator: EmailValidator
